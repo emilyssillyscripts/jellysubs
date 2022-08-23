@@ -1,3 +1,6 @@
+# jellysubs.py
+# meant to move subtitle files from Subs/ folder to where jellyfin expects
+
 import sys, getopt, shutil
 
 video_base_title = "testS01E01"
