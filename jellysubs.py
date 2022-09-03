@@ -31,25 +31,32 @@ def get_video_files():
             video_files.append(split_name[0])
             episodes += 1
 
-def get_sub_files():
-    print("Finding subtitle files...")
+    if episodes == 0:
+        print("No video files found!")
 
-    sub_folder = os.path.exists("Subs/" + video_files[0])
-    if sub_folder:
-        print("Subtitle folders exist. Trying to find files.")
-        for video in video_files:
-            directory = os.listdir("./Subs/" + video + "/")
-            for file in directory:
-                if language in file:
-                    print("Added Subs/" + video + "/" + file + " to subtitle files.")
-                    sub_files.append(file)
-                    break
+def get_sub_files():
+    if video_files != null:
+         print("Finding subtitle files...")
+
+        sub_folder = os.path.exists("Subs/" + video_files[0])
+        if sub_folder:
+            print("Subtitle folders exist. Trying to find files.")
+            for video in video_files:
+                directory = os.listdir("./Subs/" + video + "/")
+                for file in directory:
+                    if language in file:
+                        print("Added Subs/" + video + "/" + file + " to subtitle files.")
+                        sub_files.append(file)
+                        break
 
 def get_files():
     get_video_files()
     get_sub_files()
 
 def move_subs():
+    if video_files == null:
+        break
+
     print("Moving subtitle files...")
 
     for i in range(len(video_files)):
@@ -64,6 +71,7 @@ def move_subs():
                 failed.append(oldsubs)
                 continue
         else:
+            failed.append(video_files[i])
             print("Less subtitle files than videos!")
         
     if len(failed) > 0:
@@ -75,8 +83,6 @@ def move_subs():
 
 def main(argv):
     global original_sub
-
-    get_files()
 
     try:
         opts, args = getopt.getopt(argv,"hl:",["lang="])
@@ -92,11 +98,7 @@ def main(argv):
         elif opt in ("-l", "--lang"):
             language = arg
 
-    for i in range(1, episodes + 1):
-        new_episode = "E" + str(i).zfill(2)
-        temp_title = video_base_title.replace("E01", new_episode)
-        videos.append(temp_title)
-
+    get_files()
     move_subs()
 
 
