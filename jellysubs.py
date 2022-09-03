@@ -35,27 +35,28 @@ def get_video_files():
         print("No video files found!")
 
 def get_sub_files():
-    if video_files != null:
-         print("Finding subtitle files...")
+    if len(video_files) == 0:
+            return
+    print("Finding subtitle files...")
 
-        sub_folder = os.path.exists("Subs/" + video_files[0])
-        if sub_folder:
-            print("Subtitle folders exist. Trying to find files.")
-            for video in video_files:
-                directory = os.listdir("./Subs/" + video + "/")
-                for file in directory:
-                    if language in file:
-                        print("Added Subs/" + video + "/" + file + " to subtitle files.")
-                        sub_files.append(file)
-                        break
+    sub_folder = os.path.exists("Subs/" + video_files[0])
+    if sub_folder:
+        print("Subtitle folders exist. Trying to find files.")
+        for video in video_files:
+            directory = os.listdir("./Subs/" + video + "/")
+            for file in directory:
+                if language in file:
+                    print("Added Subs/" + video + "/" + file + " to subtitle files.")
+                    sub_files.append(file)
+                    break
 
 def get_files():
     get_video_files()
     get_sub_files()
 
 def move_subs():
-    if video_files == null:
-        break
+    if len(video_files) == 0:
+        return
 
     print("Moving subtitle files...")
 
