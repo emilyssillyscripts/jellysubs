@@ -1,22 +1,22 @@
 #!/usr/bin/python3
 # jellysubs.py
-# meant to move subtitle files from Subs/ folder to where jellyfin expects
+# @emilyycheesecake
+
+# Tries to find and move the subtitle files that
+# sometimes come included with TV Shows to places
+# that Jellyfin reads.
 
 import sys, getopt, shutil, os
 
-video_base_title = "testS01E01"
 episodes = 0
-videos = []
-failed = []
-original_sub = "2_English.srt"
-
 video_files = []
 video_types = [".mp4", ".mkv"]
 video_type = ".mkv"
 
 sub_files = []
-
 language = "English"
+
+failed = []
 
 def get_video_files():
     global episodes
@@ -38,10 +38,10 @@ def get_sub_files():
     if len(video_files) == 0:
             return
     print("Finding subtitle files...")
-
+    
     sub_folder = os.path.exists("Subs/" + video_files[0])
     if sub_folder:
-        print("Subtitle folders exist. Trying to find files.")
+        print("Subtitle folders exist. (Subs/<episode>/)")
         for video in video_files:
             directory = os.listdir("./Subs/" + video + "/")
             for file in directory:
@@ -83,8 +83,6 @@ def move_subs():
 
 
 def main(argv):
-    global original_sub
-
     try:
         opts, args = getopt.getopt(argv,"hl:",["lang="])
     except getopt.GetoptError:
