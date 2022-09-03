@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # jellysubs.py
 # meant to move subtitle files from Subs/ folder to where jellyfin expects
 
