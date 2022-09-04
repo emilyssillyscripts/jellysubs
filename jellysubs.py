@@ -109,7 +109,10 @@ def move_subs():
 
     for i in range(len(video_files)):
         if i < len(sub_files):
-            oldsubs = "Subs/" + video_files[i] + "/" + sub_files[i]
+            if len(directory) != 0:
+                oldsubs = directory + "Subs/" + video_files[i] + "/" + sub_files[i]
+            else:
+                oldsubs = "Subs/" + video_files[i] + "/" + sub_files[i]
             newsubs = video_files[i] + ".srt"
             try:
                 if not test_run:
@@ -134,7 +137,10 @@ def clean_titles(clean):
     print("Cleaning video titles...")
 
     for video in video_files:
-        old = video + video_type
+        if len(directory) != 0:
+            old = directory + video + video_type
+        else:
+            old = video + video_type
         new = old.replace(clean, "")
         if verbose:
             print("Moved " + old + " to " + new)
@@ -144,7 +150,10 @@ def clean_titles(clean):
     print("Cleaning subtitles...")
 
     for video in video_files:
-        old = video + ".srt"
+        if len(directory) != 0:
+            old = directory + video + ".srt"
+        else:
+            old = video + ".srt"
         new = old.replace(clean, "")
         if verbose:
             print("Moved " + old + " to " + new)
