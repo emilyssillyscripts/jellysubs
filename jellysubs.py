@@ -7,20 +7,21 @@
 # that Jellyfin reads.
 
 # Expected example file structure before moving and renaming
-# <Example TV Show S01>
-#  tests01e01-bullshit-torrent.mp4
-#  tests01e02-bullshit-torrent.mp4
-#  tests01e03-bullshit-torrent.mp4
-#  tests01e04-bullshit-torrent.mp4
-#  <Subs>
-#     <tests01e01-bullshit-torrent>
-#        69_English.srt
-#     <tests01e02-bullshit-torrent>
-#        69_English.srt
-#     <tests01e03-bullshit-torrent>
-#        69_English.srt
-#     <tests01e04-bullshit-torrent> 
-#        69_English.srt
+# Example TV Show S01
+# ├── Subs
+# │   ├── tests01e01-some-random-torrent
+# │   │   └── 32_English.srt
+# │   ├── tests01e02-some-random-torrent
+# │   │   └── 32_English.srt
+# │   ├── tests01e03-some-random-torrent
+# │   │   └── 32_English.srt
+# │   └── tests01e04-some-random-torrent
+# │       └── 32_English.srt
+# ├── tests01e01-some-random-torrent.mp4
+# ├── tests01e02-some-random-torrent.mp4
+# ├── tests01e03-some-random-torrent.mp4
+# └── tests01e04-some-random-torrent.mp4
+
 
 import sys, getopt, shutil, os
 
