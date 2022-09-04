@@ -1,11 +1,14 @@
 # jellysubs.py
  python script to move subs into jellyfin-acceptable places for tv shows
 
-## Options
+## How to Use
 ```
+python3 jellysubs.py <options>
+
 -c, --clean    | remove an unwanted part of the final filenames
 -l, --lang     | specify desired subtitle file language ("English", "Spanish", etc...)
 -v             | verbose output
+-h             | help
 ```
 
 ## Expected example file structure before running script
