@@ -25,6 +25,8 @@
 
 import sys, getopt, shutil, os
 
+directory = ""
+
 episodes = 0
 video_files = []
 video_types = [".mp4", ".mkv"]
@@ -39,14 +41,19 @@ clean = ""
 should_clean = False
 
 verbose = False
+test_run = False
 
 def get_video_files():
     global episodes
     global video_type
+    global directory
 
     print("Finding video files...")
-    directory = os.listdir("./")
-    for file in directory:
+    if len(directory) != 0:
+        video_dir = os.listdir(directory)
+    else:
+        video_dir = os.listdir("./")
+    for file in video_dir:
         split_name = os.path.splitext(file)
         file_type = split_name[1]
         if file_type in video_types:
@@ -63,18 +70,25 @@ def get_video_files():
 
 def get_sub_files():
     global language
+    global directory
 
     if len(video_files) == 0:
             return
     print("Finding subtitle files...")
-    
-    sub_folder = os.path.exists("Subs/" + video_files[0])
+
+    if len(directory) != 0:
+        sub_folder = os.path.exists(directory + "Subs/" + video_files[0])
+    else:
+        sub_folder = os.path.exists("Subs/" + video_files[0])
     if sub_folder:
         if verbose:
             print("Subtitle folders exist. (Subs/<episode>/)")
         for video in video_files:
-            directory = os.listdir("./Subs/" + video + "/")
-            for file in directory:
+            if len(directory) != 0:
+                sub_dir = os.listdir(directory + "Subs/" + video + "/")
+            else:
+                sub_dir = os.listdir("./Subs/" + video + "/")
+            for file in sub_dir:
                 if language in file:
                     if verbose:
                         print("Added Subs/" + video + "/" + file + " to subtitle files.")
@@ -98,7 +112,8 @@ def move_subs():
             oldsubs = "Subs/" + video_files[i] + "/" + sub_files[i]
             newsubs = video_files[i] + ".srt"
             try:
-                shutil.move(oldsubs, newsubs)
+                if not test_run:
+                    shutil.move(oldsubs, newsubs)
                 if verbose:
                     print("[" + str(i + 1) + "] Moved " + oldsubs + " to " + newsubs)
             except FileNotFoundError:
@@ -123,7 +138,8 @@ def clean_titles(clean):
         new = old.replace(clean, "")
         if verbose:
             print("Moved " + old + " to " + new)
-        shutil.move(old, new)
+        if not test_run:
+            shutil.move(old, new)
     
     print("Cleaning subtitles...")
 
@@ -132,25 +148,32 @@ def clean_titles(clean):
         new = old.replace(clean, "")
         if verbose:
             print("Moved " + old + " to " + new)
-        shutil.move(old, new)
+        if not test_run:
+            shutil.move(old, new)
 
 def main(argv):
     global verbose
     global language
+    global directory
+    global test_run
 
     try:
-        opts, args = getopt.getopt(argv,"hl:c:v",["lang=" , "clean="])
+        opts, args = getopt.getopt(argv,"hd:l:c:vt",["dir=", "lang=" , "clean="])
     except getopt.GetoptError:
-        print('jellysubs.py -l <language> -c <text to clean from filenames>')
+        print('jellysubs.py -d <directory> -l <language> -c <text to clean from filenames>')
         sys.exit(2)
     
     for opt,arg in opts:
         if opt == '-h':
             print('jellysubs: move subs from Subs/ to jellyfin acceptable place')
-            print('jellysubs.py -l <language> -c <text to clean from filenames>')
+            print('jellysubs.py -d <directory> -l <language> -c <text to clean from filenames>')
             sys.exit()
         elif opt == '-v':
             verbose = True
+        elif opt == '-t':
+            test_run = True
+        elif opt in ("-d", "--dir"):
+            directory = arg
         elif opt in ("-l", "--lang"):
             language = arg
         elif opt in ("-c", "--clean"):
@@ -158,7 +181,12 @@ def main(argv):
             clean = arg
 
     print("jellysubs.py")
-    print("Hello :^)\n")
+    print("Hello <3\n")
+
+    if len(directory) != 0:
+        print("Using directory: " + directory + "\n")
+    else:
+        print("Using this directory...\n")
     
     get_files()
     move_subs()
